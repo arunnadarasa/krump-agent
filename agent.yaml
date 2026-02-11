@@ -14,17 +14,13 @@ tools:
   - skill: "krump"
   - skill: "krumpklaw"
 
-# Optional: HTTP tools for external APIs
+# Optional: HTTP tool for Dance Verify integration
+# Uncomment and set DANCE_VERIFY_URL and DANCE_VERIFY_TOKEN in .env
 # - http:
 #     name: "dance_verify"
 #     baseUrl: "${DANCE_VERIFY_URL}"
 #     headers:
 #       Authorization: "Bearer ${DANCE_VERIFY_TOKEN}"
-
-# Prompt hooks (optional)
-# hooks:
-#   beforeTurn: "..."
-#   afterTurn: "..."
 
 # Logging
 logLevel: info

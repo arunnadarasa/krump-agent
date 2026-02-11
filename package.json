@@ -1,0 +1,27 @@
+{
+  "name": "krump-agent",
+  "version": "0.1.0",
+  "description": "Autonomous AI agent for Krump dance training, competition, and verification",
+  "main": "agent.yaml",
+  "scripts": {
+    "postinstall": "clawhub install krump krumpklaw --dir ./skills --force",
+    "start": "openclaw agent start --config agent.yaml",
+    "send": "openclaw message send --agent krump-agent --to asura \"$MESSAGE\""
+  },
+  "keywords": [
+    "openclaw",
+    "krump",
+    "dance",
+    "ai-agent",
+    "x402",
+    "moltbook"
+  ],
+  "author": "Asura (arunnadarasa)",
+  "license": "MIT",
+  "devDependencies": {
+    "clawhub": "^0.6.0"
+  },
+  "peerDependencies": {
+    "openclaw": ">=1.0.0"
+  }
+}

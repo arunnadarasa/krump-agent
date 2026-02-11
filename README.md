@@ -36,74 +36,65 @@ Make Krump a billion-dollar tech industry by 2027 through autonomous AI agents t
 - **DanceVerify** (external service) – API for move verification and attribution via x402 (see https://github.com/arunnadarasa/dance-verify).
 - **Agent Config** (`agent.yaml`) – OpenClaw agent configuration and tool definitions.
 
-## Quick Start
+## Automated Workflows
 
-### 1. Install OpenClaw
+The `scripts/` directory contains Node.js automation scripts. All use `.env` for credentials.
 
-Follow the official guide: https://docs.openclaw.ai
+### Daily / Weekly / Monthly Schedules
 
-Ensure you have:
-- Node.js 20+
-- npm or yarn
-- A VPS or local server to run the agent
-
-### 2. Clone and Install Skills
-
+**DanceTech (3 posts/day, one per track, spaced 30 min apart)**
 ```bash
-# Clone this repo
-git clone https://github.com/arunnadarasa/krump-agent.git
-cd krump-agent
-
-# Install ClawHub CLI
-npm i -g clawhub
-
-# Install required skills into ./skills
-clawhub install krump --dir ./skills
-clawhub install krumpklaw --dir ./skills --force
+# First run each day (or via cron)
+node scripts/dancetech_post.js
 ```
+Creates real repos, posts to m/dancetech, verifies.
 
-### 3. Configure Environment
-
-Copy `.env.example` to `.env` and fill in:
-
+**KrumpClab (Daily Lab)**
 ```bash
-# Moltbook API credentials (required for KrumpClaw)
-MOLTBOOK_API_KEY=your_key_here
-MOLTBOOK_PROFILE=https://moltbook.com/u/YourAgentName
-
-# Optional: Dance Verify endpoint
-DANCE_VERIFY_URL=https://your-dance-verify-instance.com
-
-# OpenClaw config
-OPENCLAW_MODEL=openrouter/stepfun/step-3.5-flash:free
+node scripts/krumpclab_post.js
 ```
+Post a lab session to m/krumpclaw.
 
-### 4. Register the Agent with OpenClaw
-
+**Engagement (≈50 comments/day)**
 ```bash
-# Add the agent (point to this workspace)
-openclaw agents add --workspace . --name krump-agent --agent-dir .
+COMMENTS_PER_RUN=2 node scripts/engage_comments.js
 ```
+Run every ~30 minutes via cron to average 2 comments per run.
 
-### 5. Start the Agent
-
-You can run the agent in two ways:
-
-**Option A: Interactive (foreground)**
+**Heartbeat (Feedback → Iteration)**
 ```bash
-openclaw agent --name krump-agent --message "Hello"
+node scripts/heartbeat.js
 ```
+Collects feedback on dancetech posts and spawns iterative repos (max 3/day). Posts Insights to m/dancetech.
 
-**Option B: Attach to a Channel (e.g., webchat, discord)**
+**Krump Community (Welcome new agents)**
 ```bash
-# Bind the agent to a channel
-openclaw agents bind --agent krump-agent --channel webchat
-# Then send messages to that channel to trigger the agent
+node scripts/krump_community.js
 ```
+Scan krump submolt for new agents and welcome them.
 
-**Option C: Schedule Daily Labs (cron)**
+**IKS Tournament Prep (First Saturday monthly)**
 ```bash
-openclaw cron add --name "daily-lab" --cron "0 9 * * *" --system-event "Post your daily lab session" --session-target krump-agent
+node scripts/iks_prepare.js
+```
+Posts tournament registration announcement on the first Saturday.
+
+**Saturday Session (Weekly battle)**
+```bash
+node scripts/krumpsession_post.js
+```
+Post a competitive Krump round to m/krumpclaw with a character and kill off.
+
+### Sample Crontab (London time)
+
+```cron
+0 9 * * * cd /path/to/krump-agent && node scripts/dancetech_post.js >> /tmp/dance.log 2>&1
+15 10 * * * cd /path/to/krump-agent && node scripts/krumpclab_post.js >> /tmp/lab.log 2>&1
+0 12,15,18 * * * cd /path/to/krump-agent && COMMENTS_PER_RUN=2 node scripts/engage_comments.js >> /tmp/engage.log 2>&1
+0 14,17 * * * cd /path/to/krump-agent && node scripts/heartbeat.js >> /tmp/heartbeat.log 2>&1
+30 8 * * * cd /path/to/krump-agent && node scripts/krump_community.js >> /tmp/community.log 2>&1
+0 9 * * 6 cd /path/to/krump-agent && node scripts/krumpsession_post.js >> /tmp/session.log 2>&1
+0 9 1 * * cd /path/to/krump-agent && node scripts/iks_prepare.js >> /tmp/iks.log 2>&1
 ```
 
 See `scripts/` for example tasks.

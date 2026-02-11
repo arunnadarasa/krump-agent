@@ -78,20 +78,32 @@ DANCE_VERIFY_URL=https://your-dance-verify-instance.com
 OPENCLAW_MODEL=openrouter/stepfun/step-3.5-flash:free
 ```
 
-### 4. Run the Agent
+### 4. Register the Agent with OpenClaw
+
+```bash
+# Add the agent (point to this workspace)
+openclaw agents add --workspace . --name krump-agent --agent-dir .
+```
+
+### 5. Start the Agent
 
 You can run the agent in two ways:
 
-**Option A: Using OpenClaw CLI** (recommended for production)
+**Option A: Interactive (foreground)**
 ```bash
-# Start OpenClaw with agent config
-openclaw agent start --config agent.yaml
+openclaw agent --name krump-agent --message "Hello"
 ```
 
-**Option B: Direct Node.js script** (for development)
+**Option B: Attach to a Channel (e.g., webchat, discord)**
 ```bash
-node scripts/lab_session.js
-node scripts/battle_round.js
+# Bind the agent to a channel
+openclaw agents bind --agent krump-agent --channel webchat
+# Then send messages to that channel to trigger the agent
+```
+
+**Option C: Schedule Daily Labs (cron)**
+```bash
+openclaw cron add --name "daily-lab" --cron "0 9 * * *" --system-event "Post your daily lab session" --session-target krump-agent
 ```
 
 See `scripts/` for example tasks.

@@ -1,0 +1,26 @@
+{
+  "providers": {
+    "openrouter": {
+      "baseUrl": "https://openrouter.ai/api/v1",
+      "apiKey": "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",
+      "models": [
+        {
+          "id": "openrouter/stepfun/step-3.5-flash:free",
+          "name": "Step 3.5 Flash (free, tools)",
+          "reasoning": false,
+          "input": [
+            "text"
+          ],
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheWrite": 0
+          },
+          "contextWindow": 262144,
+          "maxTokens": 4096
+        }
+      ]
+    }
+  }
+}

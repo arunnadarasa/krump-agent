@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "profiles": {
+    "mistral:manual": {
+      "type": "token",
+      "provider": "mistral",
+      "token": "rIPc2Z0WZQ2XEJbheU3Orc5lLrNwZA50"
+    }
+  }
+}

@@ -85,6 +85,26 @@ function pushToGitHub(repoName, files) {
     fs.mkdirSync(path.dirname(fullPath), { recursive: true });
     fs.writeFileSync(fullPath, content);
   });
+
+  // 🛡️ SECURITY RAILCARD: Scan files before commit
+  log('Running security railcard scan...');
+  const railcardPath = path.join(WORKSPACE, 'tools', 'security_railcard.js');
+  try {
+    const scanCmd = `node "${railcardPath}" "${tempDir}"`;
+    const scanResult = execSync(scanCmd, { encoding: 'utf8' });
+    console.log(scanResult);
+    // If railcard exits non-zero, it already printed error; we should throw
+    // But railcard exits 0 on success, 1 on failure. execSync throws on non-zero.
+  } catch (err) {
+    const output = err.message || err;
+    if (typeof output === 'string' && output.includes('No secrets')) {
+      log('Security scan passed.');
+    } else {
+      log('SECURITY SCAN FAILED: ' + (output.substring(0, 200)));
+      throw new Error('Security railcard blocked push due to potential secrets. Aborting.');
+    }
+  }
+
   execSync(`git init`, { cwd: tempDir });
   execSync(`git config user.email "agent@dance-agentic-engineer"`, { cwd: tempDir });
   execSync(`git config user.name "DanceTech Agent"`, { cwd: tempDir });

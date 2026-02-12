@@ -2,7 +2,7 @@
   "providers": {
     "openrouter": {
       "baseUrl": "https://openrouter.ai/api/v1",
-      "apiKey": "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",
+      "apiKey": "",
       "models": [
         {
           "id": "openrouter/stepfun/step-3.5-flash:free",
